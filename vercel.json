@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "website/static/**", "use": "@vercel/static" },
+    { "src": "mysite/wsgi.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/static/(.*)", "dest": "/website/static/website/$1" },
+    { "src": "/(.*)", "dest": "mysite/wsgi.py" }
+  ]
+}
