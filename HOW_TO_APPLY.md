@@ -1,10 +1,10 @@
-# Vercel Deploy Fix — kaise lagayein
+# Vercel Deploy Fix v2 — CSS/images fix
 
-Ye zip mein 4 files hain:
-- `requirements.txt` (naya, repo root mein)
-- `vercel.json` (naya, repo root mein)
-- `mysite/wsgi.py` (existing file ka updated version)
-- `mysite/settings.py` (existing file ka updated version — sirf ALLOWED_HOSTS line badli hai)
+Is zip mein 4 files hain (pehle wale patch ka updated version — vercel.json mein galti thi jiski wajah se CSS aur images load nahi ho rahe the, ab fix hai):
+- `requirements.txt`
+- `vercel.json` ← is baar sahi static/media path mapping ke saath
+- `mysite/wsgi.py`
+- `mysite/settings.py`
 
 ## Lagane ka tarika
 
