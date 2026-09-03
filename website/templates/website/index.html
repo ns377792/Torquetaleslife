@@ -1,0 +1,796 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{{ site.site_name }} - {{ site.tagline }}</title>
+  <meta name="title" content="{{ site.site_name }} - {{ site.tagline }}">
+  <meta name="description" content="{{ site.tagline }}">
+
+  {% if site.favicon %}
+  <link rel="shortcut icon" href="{{ site.favicon.url }}">
+  {% else %}
+  <link rel="shortcut icon" href="{% static 'website/favicon.svg' %}" type="image/svg+xml">
+  {% endif %}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'website/assets/css/style.css' %}">
+
+  {% for slide in hero_slides %}
+  <link rel="preload" as="image" href="{{ slide.image.url }}">
+  {% endfor %}
+
+</head>
+
+<body id="top">
+
+  <div class="preload" data-preaload>
+    <div class="circle"></div>
+    <p class="text">{{ site.site_name }}</p>
+  </div>
+
+  {% if messages %}
+  <div class="container" style="padding-top: 10px;">
+    {% for message in messages %}
+    <p style="background:#f5c76e;color:#222;padding:12px 20px;border-radius:6px;margin-bottom:8px;">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- 
+    - #TOP BAR
+  -->
+
+  <div class="topbar">
+    <div class="container">
+
+      <address class="topbar-item">
+        <div class="icon">
+          <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+        </div>
+
+        <span class="span">
+          {{ site.address }}
+        </span>
+      </address>
+
+      <div class="separator"></div>
+
+      <div class="topbar-item item-2">
+        <div class="icon">
+          <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+        </div>
+
+        <span class="span">{{ site.open_hours }}</span>
+      </div>
+
+      <a href="tel:{{ site.phone_link }}" class="topbar-item link">
+        <div class="icon">
+          <ion-icon name="call-outline" aria-hidden="true"></ion-icon>
+        </div>
+
+        <span class="span">{{ site.phone }}</span>
+      </a>
+
+      <div class="separator"></div>
+
+      <a href="mailto:{{ site.email }}" class="topbar-item link">
+        <div class="icon">
+          <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
+        </div>
+
+        <span class="span">{{ site.email }}</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- 
+    - #HEADER
+  -->
+
+  <header class="header" data-header>
+    <div class="container">
+
+      <a href="#" class="logo">
+        {% if site.logo %}
+        <img src="{{ site.logo.url }}" width="160" height="50" alt="{{ site.site_name }} - Home">
+        {% else %}
+        <img src="{% static 'website/assets/images/logo.svg' %}" width="160" height="50" alt="{{ site.site_name }} - Home">
+        {% endif %}
+      </a>
+
+      <nav class="navbar" data-navbar>
+
+        <button class="close-btn" aria-label="close menu" data-nav-toggler>
+          <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+        </button>
+
+        <a href="#" class="logo">
+          {% if site.logo %}
+          <img src="{{ site.logo.url }}" width="160" height="50" alt="{{ site.site_name }} - Home">
+          {% else %}
+          <img src="{% static 'website/assets/images/logo.svg' %}" width="160" height="50" alt="{{ site.site_name }} - Home">
+          {% endif %}
+        </a>
+
+        <ul class="navbar-list">
+
+          <li class="navbar-item">
+            <a href="#home" class="navbar-link hover-underline active">
+              <div class="separator"></div>
+              <span class="span">Home</span>
+            </a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="#menu" class="navbar-link hover-underline">
+              <div class="separator"></div>
+              <span class="span">Menus</span>
+            </a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="#about" class="navbar-link hover-underline">
+              <div class="separator"></div>
+              <span class="span">About Us</span>
+            </a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="#" class="navbar-link hover-underline">
+              <div class="separator"></div>
+              <span class="span">Our Chefs</span>
+            </a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="#reservation" class="navbar-link hover-underline">
+              <div class="separator"></div>
+              <span class="span">Contact</span>
+            </a>
+          </li>
+
+        </ul>
+
+        <div class="text-center">
+          <p class="headline-1 navbar-title">Visit Us</p>
+
+          <address class="body-4">
+            {{ site.address }}
+          </address>
+
+          <p class="body-4 navbar-text">{{ site.navbar_open_hours }}</p>
+
+          <a href="mailto:{{ site.email }}" class="body-4 sidebar-link">{{ site.email }}</a>
+
+          <div class="separator"></div>
+
+          <p class="contact-label">Booking Request</p>
+
+          <a href="tel:{{ site.booking_phone_link }}" class="body-1 contact-number hover-underline">
+            {{ site.booking_phone }}
+          </a>
+        </div>
+
+      </nav>
+
+      <a href="#reservation" class="btn btn-secondary">
+        <span class="text text-1">Find A Table</span>
+        <span class="text text-2" aria-hidden="true">Find A Table</span>
+      </a>
+
+      <button class="nav-open-btn" aria-label="open menu" data-nav-toggler>
+        <span class="line line-1"></span>
+        <span class="line line-2"></span>
+        <span class="line line-3"></span>
+      </button>
+
+      <div class="overlay" data-nav-toggler data-overlay></div>
+
+    </div>
+  </header>
+
+  <main>
+    <article>
+
+      <!-- 
+        - #HERO
+      -->
+
+      <section class="hero text-center" aria-label="home" id="home">
+
+        <ul class="hero-slider" data-hero-slider>
+
+          {% for slide in hero_slides %}
+          <li class="slider-item{% if forloop.first %} active{% endif %}" data-hero-slider-item>
+
+            <div class="slider-bg">
+              <img src="{{ slide.image.url }}" width="1880" height="950" alt="" class="img-cover">
+            </div>
+
+            <p class="label-2 section-subtitle slider-reveal">{{ slide.subtitle }}</p>
+
+            <h1 class="display-1 hero-title slider-reveal">
+              {{ slide.title_line_1 }} <br>
+              {{ slide.title_line_2 }}
+            </h1>
+
+            <p class="body-2 hero-text slider-reveal">
+              {{ slide.text }}
+            </p>
+
+            <a href="#menu" class="btn btn-primary slider-reveal">
+              <span class="text text-1">{{ slide.button_text }}</span>
+              <span class="text text-2" aria-hidden="true">{{ slide.button_text }}</span>
+            </a>
+
+          </li>
+          {% endfor %}
+
+        </ul>
+
+        <button class="slider-btn prev" aria-label="slide to previous" data-prev-btn>
+          <ion-icon name="chevron-back"></ion-icon>
+        </button>
+
+        <button class="slider-btn next" aria-label="slide to next" data-next-btn>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </button>
+
+        <a href="#reservation" class="hero-btn has-after">
+          <img src="{% static 'website/assets/images/hero-icon.png' %}" width="48" height="48" alt="booking icon">
+          <span class="label-2 text-center span">Book A Table</span>
+        </a>
+
+      </section>
+
+      <!-- 
+        - #SERVICE
+      -->
+
+      <section class="section service bg-black-10 text-center" aria-label="service">
+        <div class="container">
+
+          <p class="section-subtitle label-2">{{ service_section.subtitle }}</p>
+          <h2 class="headline-1 section-title">{{ service_section.title }}</h2>
+          <p class="section-text">{{ service_section.text }}</p>
+
+          <ul class="grid-list">
+
+            {% for card in service_cards %}
+            <li>
+              <div class="service-card">
+
+                <a href="#menu" class="has-before hover:shine">
+                  <figure class="card-banner img-holder" style="--width: 285; --height: 336;">
+                    <img src="{{ card.image.url }}" width="285" height="336" loading="lazy" alt="{{ card.title }}" class="img-cover">
+                  </figure>
+                </a>
+
+                <div class="card-content">
+                  <h3 class="title-4 card-title">
+                    <a href="#menu">{{ card.title }}</a>
+                  </h3>
+                  <a href="#menu" class="btn-text hover-underline label-2">{{ card.link_text }}</a>
+                </div>
+
+              </div>
+            </li>
+            {% endfor %}
+
+          </ul>
+
+          <img src="{% static 'website/assets/images/shape-1.png' %}" width="246" height="412" loading="lazy" alt="shape" class="shape shape-1 move-anim">
+          <img src="{% static 'website/assets/images/shape-2.png' %}" width="343" height="345" loading="lazy" alt="shape" class="shape shape-2 move-anim">
+
+        </div>
+      </section>
+
+      <!-- 
+        - #ABOUT
+      -->
+
+      <section class="section about text-center" aria-labelledby="about-label" id="about">
+        <div class="container">
+
+          <div class="about-content">
+
+            <p class="label-2 section-subtitle" id="about-label">{{ about.subtitle }}</p>
+            <h2 class="headline-1 section-title">{{ about.title }}</h2>
+            <p class="section-text">{{ about.text }}</p>
+
+            <div class="contact-label">Book Through Call</div>
+            <a href="tel:{{ about.call_phone_link }}" class="body-1 contact-number hover-underline">{{ about.call_phone }}</a>
+
+            <a href="#reservation" class="btn btn-primary">
+              <span class="text text-1">Read More</span>
+              <span class="text text-2" aria-hidden="true">Read More</span>
+            </a>
+
+          </div>
+
+          <figure class="about-banner">
+
+            {% if about.banner_image %}
+            <img src="{{ about.banner_image.url }}" width="570" height="570" loading="lazy" alt="about banner" class="w-100" data-parallax-item data-parallax-speed="1">
+            {% endif %}
+
+            {% if about.small_image %}
+            <div class="abs-img abs-img-1 has-before" data-parallax-item data-parallax-speed="1.75">
+              <img src="{{ about.small_image.url }}" width="285" height="285" loading="lazy" alt="" class="w-100">
+            </div>
+            {% endif %}
+
+            <div class="abs-img abs-img-2 has-before">
+              <img src="{% static 'website/assets/images/badge-2.png' %}" width="133" height="134" loading="lazy" alt="">
+            </div>
+
+          </figure>
+
+          <img src="{% static 'website/assets/images/shape-3.png' %}" width="197" height="194" loading="lazy" alt="" class="shape">
+
+        </div>
+      </section>
+
+      <!-- 
+        - #SPECIAL DISH
+      -->
+
+      <section class="special-dish text-center" aria-labelledby="dish-label">
+
+        <div class="special-dish-banner">
+          {% if special_dish.banner_image %}
+          <img src="{{ special_dish.banner_image.url }}" width="940" height="900" loading="lazy" alt="special dish" class="img-cover">
+          {% endif %}
+        </div>
+
+        <div class="special-dish-content bg-black-10">
+          <div class="container">
+
+            <img src="{% static 'website/assets/images/badge-1.png' %}" width="28" height="41" loading="lazy" alt="badge" class="abs-img">
+
+            <p class="section-subtitle label-2">{{ special_dish.subtitle }}</p>
+            <h2 class="headline-1 section-title">{{ special_dish.title }}</h2>
+            <p class="section-text">{{ special_dish.text }}</p>
+
+            <div class="wrapper">
+              <del class="del body-3">${{ special_dish.old_price }}</del>
+              <span class="span body-1">${{ special_dish.new_price }}</span>
+            </div>
+
+            <a href="#menu" class="btn btn-primary">
+              <span class="text text-1">View All Menu</span>
+              <span class="text text-2" aria-hidden="true">View All Menu</span>
+            </a>
+
+          </div>
+        </div>
+
+        <img src="{% static 'website/assets/images/shape-4.png' %}" width="179" height="359" loading="lazy" alt="" class="shape shape-1">
+        <img src="{% static 'website/assets/images/shape-9.png' %}" width="351" height="462" loading="lazy" alt="" class="shape shape-2">
+
+      </section>
+
+      <!-- 
+        - #MENU
+      -->
+
+      <section class="section menu" aria-label="menu-label" id="menu">
+        <div class="container">
+
+          <p class="section-subtitle text-center label-2">Special Selection</p>
+          <h2 class="headline-1 section-title text-center">Delicious Menu</h2>
+
+          <ul class="grid-list">
+
+            {% for item in menu_items %}
+            <li>
+              <div class="menu-card hover:card">
+
+                <figure class="card-banner img-holder" style="--width: 100; --height: 100;">
+                  <img src="{{ item.image.url }}" width="100" height="100" loading="lazy" alt="{{ item.title }}" class="img-cover">
+                </figure>
+
+                <div>
+
+                  <div class="title-wrapper">
+                    <h3 class="title-3">
+                      <a href="#" class="card-title">{{ item.title }}</a>
+                    </h3>
+
+                    {% if item.badge %}
+                    <span class="badge label-1">{{ item.badge }}</span>
+                    {% endif %}
+
+                    <span class="span title-2">${{ item.price }}</span>
+                  </div>
+
+                  <p class="card-text label-1">
+                    {{ item.description }}
+                  </p>
+
+                </div>
+
+              </div>
+            </li>
+            {% endfor %}
+
+          </ul>
+
+          <p class="menu-text text-center">
+            During winter daily from <span class="span">7:00 pm</span> to <span class="span">9:00 pm</span>
+          </p>
+
+          <a href="#" class="btn btn-primary">
+            <span class="text text-1">View All Menu</span>
+            <span class="text text-2" aria-hidden="true">View All Menu</span>
+          </a>
+
+          <img src="{% static 'website/assets/images/shape-5.png' %}" width="921" height="1036" loading="lazy" alt="shape" class="shape shape-2 move-anim">
+          <img src="{% static 'website/assets/images/shape-6.png' %}" width="343" height="345" loading="lazy" alt="shape" class="shape shape-3 move-anim">
+
+        </div>
+      </section>
+
+      <!-- 
+        - #TESTIMONIALS
+      -->
+
+      {% if testimonial %}
+      <section class="section testi text-center has-bg-image"
+        {% if testimonial.background_image %}style="background-image: url('{{ testimonial.background_image.url }}')"{% endif %}
+        aria-label="testimonials">
+        <div class="container">
+
+          <div class="quote">"</div>
+
+          <p class="headline-2 testi-text">
+            {{ testimonial.text }}
+          </p>
+
+          <div class="wrapper">
+            <div class="separator"></div>
+            <div class="separator"></div>
+            <div class="separator"></div>
+          </div>
+
+          <div class="profile">
+            {% if testimonial.avatar %}
+            <img src="{{ testimonial.avatar.url }}" width="100" height="100" loading="lazy" alt="{{ testimonial.customer_name }}" class="img">
+            {% endif %}
+            <p class="label-2 profile-name">{{ testimonial.customer_name }}</p>
+          </div>
+
+        </div>
+      </section>
+      {% endif %}
+
+      <!-- 
+        - #RESERVATION
+      -->
+
+      <section class="reservation" id="reservation">
+        <div class="container">
+
+          <div class="form reservation-form bg-black-10">
+
+            <form action="#reservation" method="post" class="form-left">
+              {% csrf_token %}
+              <input type="hidden" name="form_type" value="reservation">
+
+              <h2 class="headline-1 text-center">Online Reservation</h2>
+
+              <p class="form-text text-center">
+                Booking request <a href="tel:{{ site.booking_phone_link }}" class="link">{{ site.booking_phone }}</a>
+                or fill out the order form
+              </p>
+
+              <div class="input-wrapper">
+                <input type="text" name="name" placeholder="Your Name" autocomplete="off" class="input-field" required>
+                <input type="tel" name="phone" placeholder="Phone Number" autocomplete="off" class="input-field" required>
+              </div>
+
+              <div class="input-wrapper">
+
+                <div class="icon-wrapper">
+                  <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
+
+                  <select name="person" class="input-field">
+                    <option value="1-person">1 Person</option>
+                    <option value="2-person">2 Person</option>
+                    <option value="3-person">3 Person</option>
+                    <option value="4-person">4 Person</option>
+                    <option value="5-person">5 Person</option>
+                    <option value="6-person">6 Person</option>
+                    <option value="7-person">7 Person</option>
+                  </select>
+
+                  <ion-icon name="chevron-down" aria-hidden="true"></ion-icon>
+                </div>
+
+                <div class="icon-wrapper">
+                  <ion-icon name="calendar-clear-outline" aria-hidden="true"></ion-icon>
+                  <input type="date" name="reservation-date" class="input-field" required>
+                  <ion-icon name="chevron-down" aria-hidden="true"></ion-icon>
+                </div>
+
+                <div class="icon-wrapper">
+                  <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+
+                  <select name="time" class="input-field">
+                    <option value="08:00am">08 : 00 am</option>
+                    <option value="09:00am">09 : 00 am</option>
+                    <option value="010:00am">10 : 00 am</option>
+                    <option value="011:00am">11 : 00 am</option>
+                    <option value="012:00am">12 : 00 am</option>
+                    <option value="01:00pm">01 : 00 pm</option>
+                    <option value="02:00pm">02 : 00 pm</option>
+                    <option value="03:00pm">03 : 00 pm</option>
+                    <option value="04:00pm">04 : 00 pm</option>
+                    <option value="05:00pm">05 : 00 pm</option>
+                    <option value="06:00pm">06 : 00 pm</option>
+                    <option value="07:00pm">07 : 00 pm</option>
+                    <option value="08:00pm">08 : 00 pm</option>
+                    <option value="09:00pm">09 : 00 pm</option>
+                    <option value="10:00pm">10 : 00 pm</option>
+                  </select>
+
+                  <ion-icon name="chevron-down" aria-hidden="true"></ion-icon>
+                </div>
+
+              </div>
+
+              <textarea name="message" placeholder="Message" autocomplete="off" class="input-field"></textarea>
+
+              <button type="submit" class="btn btn-secondary">
+                <span class="text text-1">Book A Table</span>
+                <span class="text text-2" aria-hidden="true">Book A Table</span>
+              </button>
+
+            </form>
+
+            <div class="form-right text-center" style="background-image: url('{% static 'website/assets/images/form-pattern.png' %}')">
+
+              <h2 class="headline-1 text-center">Contact Us</h2>
+
+              <p class="contact-label">Booking Request</p>
+              <a href="tel:{{ site.booking_phone_link }}" class="body-1 contact-number hover-underline">{{ site.booking_phone }}</a>
+
+              <div class="separator"></div>
+
+              <p class="contact-label">Location</p>
+              <address class="body-4">
+                {{ site.address }}
+              </address>
+
+              <p class="contact-label">Lunch Time</p>
+              <p class="body-4">
+                {{ site.reservation_lunch_time }}
+              </p>
+
+              <p class="contact-label">Dinner Time</p>
+              <p class="body-4">
+                {{ site.reservation_dinner_time }}
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 
+        - #FEATURES
+      -->
+
+      <section class="section features text-center" aria-label="features">
+        <div class="container">
+
+          <p class="section-subtitle label-2">Why Choose Us</p>
+          <h2 class="headline-1 section-title">Our Strength</h2>
+
+          <ul class="grid-list">
+
+            {% for feature in features %}
+            <li class="feature-item">
+              <div class="feature-card">
+
+                <div class="card-icon">
+                  <img src="{{ feature.icon.url }}" width="100" height="80" loading="lazy" alt="icon">
+                </div>
+
+                <h3 class="title-2 card-title">{{ feature.title }}</h3>
+                <p class="label-1 card-text">{{ feature.text }}</p>
+
+              </div>
+            </li>
+            {% endfor %}
+
+          </ul>
+
+          <img src="{% static 'website/assets/images/shape-7.png' %}" width="208" height="178" loading="lazy" alt="shape" class="shape shape-1">
+          <img src="{% static 'website/assets/images/shape-8.png' %}" width="120" height="115" loading="lazy" alt="shape" class="shape shape-2">
+
+        </div>
+      </section>
+
+      <!-- 
+        - #EVENT
+      -->
+
+      <section class="section event bg-black-10" aria-label="event">
+        <div class="container">
+
+          <p class="section-subtitle label-2 text-center">Recent Updates</p>
+          <h2 class="section-title headline-1 text-center">Upcoming Event</h2>
+
+          <ul class="grid-list">
+
+            {% for event in events %}
+            <li>
+              <div class="event-card has-before hover:shine">
+
+                <div class="card-banner img-holder" style="--width: 350; --height: 450;">
+                  <img src="{{ event.image.url }}" width="350" height="450" loading="lazy" alt="{{ event.title }}" class="img-cover">
+                  <time class="publish-date label-2" datetime="{{ event.date|date:'Y-m-d' }}">{{ event.date|date:'d/m/Y' }}</time>
+                </div>
+
+                <div class="card-content">
+                  <p class="card-subtitle label-2 text-center">{{ event.subtitle }}</p>
+                  <h3 class="card-title title-2 text-center">
+                    {{ event.title }}
+                  </h3>
+                </div>
+
+              </div>
+            </li>
+            {% endfor %}
+
+          </ul>
+
+          <a href="#" class="btn btn-primary">
+            <span class="text text-1">View Our Blog</span>
+            <span class="text text-2" aria-hidden="true">View Our Blog</span>
+          </a>
+
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <!-- 
+    - #FOOTER
+  -->
+
+  <footer class="footer section has-bg-image text-center"
+    {% if site.footer_background %}style="background-image: url('{{ site.footer_background.url }}')"{% endif %}>
+    <div class="container">
+
+      <div class="footer-top grid-list">
+
+        <div class="footer-brand has-before has-after">
+
+          <a href="#" class="logo">
+            {% if site.logo %}
+            <img src="{{ site.logo.url }}" width="160" height="50" loading="lazy" alt="{{ site.site_name }} home">
+            {% else %}
+            <img src="{% static 'website/assets/images/logo.svg' %}" width="160" height="50" loading="lazy" alt="{{ site.site_name }} home">
+            {% endif %}
+          </a>
+
+          <address class="body-4">
+            {{ site.address }}
+          </address>
+
+          <a href="mailto:{{ site.email }}" class="body-4 contact-link">{{ site.email }}</a>
+          <a href="tel:{{ site.booking_phone_link }}" class="body-4 contact-link">Booking Request : {{ site.booking_phone }}</a>
+
+          <p class="body-4">
+            {{ site.footer_open_hours }}
+          </p>
+
+          <div class="wrapper">
+            <div class="separator"></div>
+            <div class="separator"></div>
+            <div class="separator"></div>
+          </div>
+
+          <p class="title-1">Get News & Offers</p>
+
+          <p class="label-1">
+            {{ site.newsletter_offer_text }}
+          </p>
+
+          <form action="#top" method="post" class="input-wrapper">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="newsletter">
+            <div class="icon-wrapper">
+              <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
+              <input type="email" name="email_address" placeholder="Your email" autocomplete="off" class="input-field" required>
+            </div>
+
+            <button type="submit" class="btn btn-secondary">
+              <span class="text text-1">Subscribe</span>
+              <span class="text text-2" aria-hidden="true">Subscribe</span>
+            </button>
+          </form>
+
+        </div>
+
+        <ul class="footer-list">
+
+          <li>
+            <a href="#home" class="label-2 footer-link hover-underline">Home</a>
+          </li>
+
+          <li>
+            <a href="#menu" class="label-2 footer-link hover-underline">Menus</a>
+          </li>
+
+          <li>
+            <a href="#about" class="label-2 footer-link hover-underline">About Us</a>
+          </li>
+
+          <li>
+            <a href="#" class="label-2 footer-link hover-underline">Our Chefs</a>
+          </li>
+
+          <li>
+            <a href="#reservation" class="label-2 footer-link hover-underline">Contact</a>
+          </li>
+
+        </ul>
+
+        <ul class="footer-list">
+
+          {% for social in social_links %}
+          <li>
+            <a href="{{ social.url }}" target="_blank" class="label-2 footer-link hover-underline">{{ social.name }}</a>
+          </li>
+          {% endfor %}
+
+        </ul>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p class="copyright">
+          {{ site.copyright_text }}
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- 
+    - #BACK TO TOP
+  -->
+
+  <a href="#top" class="back-top-btn active" aria-label="back to top" data-back-top-btn>
+    <ion-icon name="chevron-up" aria-hidden="true"></ion-icon>
+  </a>
+
+  <!-- 
+    - custom js link
+  -->
+  <script src="{% static 'website/assets/js/script.js' %}"></script>
+
+  <!-- 
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>
