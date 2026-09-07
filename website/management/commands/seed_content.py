@@ -6,7 +6,7 @@ from django.conf import settings
 
 from website.models import (
     SiteSettings, HeroSlide, ServiceCard, ServiceSection, AboutSection,
-    SpecialDish, MenuItem, Testimonial, Feature, Event, SocialLink,
+    SpecialDish, MenuItem, Testimonial, Feature, Event, GalleryItem, SocialLink,
 )
 
 IMG_DIR = Path(settings.BASE_DIR) / "website" / "static" / "website" / "assets" / "images"
@@ -24,9 +24,9 @@ class Command(BaseCommand):
         # SiteSettings
         site = SiteSettings.load()
         if not site.logo:
-            f = img_file("logo.svg")
+            f = img_file("torque-tales-logo.jpg")
             if f:
-                site.logo.save("logo.svg", f, save=False)
+                site.logo.save("torque-tales-logo.jpg", f, save=False)
         if not site.favicon:
             fav_path = Path(settings.BASE_DIR) / "website" / "static" / "website" / "favicon.svg"
             if fav_path.exists():
@@ -155,11 +155,11 @@ class Command(BaseCommand):
         if not Event.objects.exists():
             events = [
                 dict(title="Flavour so good you'll try to eat with your eyes.", subtitle="Food, Flavour",
-                     image="event-1.jpg", date="2026-09-15", order=1),
+                     image="event-1.jpg", order=1),
                 dict(title="Flavour so good you'll try to eat with your eyes.", subtitle="Healthy Food",
-                     image="event-2.jpg", date="2026-09-08", order=2),
+                     image="event-2.jpg", order=2),
                 dict(title="Flavour so good you'll try to eat with your eyes.", subtitle="Recipie",
-                     image="event-3.jpg", date="2026-09-03", order=3),
+                     image="event-3.jpg", order=3),
             ]
             for ev in events:
                 f = img_file(ev.pop("image"))
@@ -168,6 +168,26 @@ class Command(BaseCommand):
                     event.image.save(f.name, f, save=False)
                 event.save()
         self.stdout.write(self.style.SUCCESS("Events ready"))
+
+        # Gallery
+        if not GalleryItem.objects.exists():
+            gallery_items = [
+                dict(title="Signature Café Experience", category="Café Vibes", image="hero-slider-1.jpg", order=1),
+                dict(title="Moments at Torque Tales", category="Café Vibes", image="hero-slider-2.jpg", order=2),
+                dict(title="Evening Café Vibes", category="Café Vibes", image="hero-slider-3.jpg", order=3),
+                dict(title="Made to Be Remembered", category="Café Vibes", image="about-banner.jpg", order=4),
+                dict(title="Freshly Crafted Flavours", category="Food & Coffee", image="special-dish-banner.jpg", order=5),
+                dict(title="Chef's Special", category="Food & Coffee", image="service-1.jpg", order=6),
+                dict(title="Community & Celebrations", category="Events & Guests", image="event-1.jpg", order=7),
+                dict(title="Great Food, Great Company", category="Events & Guests", image="event-2.jpg", order=8),
+            ]
+            for item_data in gallery_items:
+                f = img_file(item_data.pop("image"))
+                gallery_item = GalleryItem(**item_data)
+                if f:
+                    gallery_item.image.save(f.name, f, save=False)
+                gallery_item.save()
+        self.stdout.write(self.style.SUCCESS("Gallery ready"))
 
         # Social links
         if not SocialLink.objects.exists():

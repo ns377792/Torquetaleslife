@@ -3,7 +3,7 @@ from django.contrib import messages
 
 from .models import (
     SiteSettings, HeroSlide, ServiceCard, ServiceSection, AboutSection,
-    SpecialDish, MenuItem, Testimonial, Feature, Event, SocialLink,
+    SpecialDish, MenuItem, Testimonial, Feature, Event, GalleryItem, SocialLink,
     Reservation, NewsletterSubscriber,
 )
 
@@ -48,3 +48,20 @@ def index(request):
         "social_links": SocialLink.objects.filter(is_active=True),
     }
     return render(request, "website/index.html", context)
+
+
+def gallery(request):
+    sections = {}
+    for item in GalleryItem.objects.filter(is_active=True):
+        section_name = item.category.strip() or "Café Moments"
+        sections.setdefault(section_name, []).append(item)
+
+    context = {
+        "site": SiteSettings.load(),
+        "gallery_sections": [
+            {"title": title, "items": items}
+            for title, items in sections.items()
+        ],
+        "social_links": SocialLink.objects.filter(is_active=True),
+    }
+    return render(request, "website/gallery.html", context)

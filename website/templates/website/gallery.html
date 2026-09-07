@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery | {{ site.site_name }}</title>
+  <meta name="description" content="Explore the food, ambience and memorable café moments at {{ site.site_name }}.">
+  {% if site.favicon %}<link rel="shortcut icon" href="{{ site.favicon.url }}">{% else %}<link rel="shortcut icon" href="{% static 'website/favicon.svg' %}" type="image/svg+xml">{% endif %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Forum&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'website/assets/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'website/assets/css/gallery.css' %}">
+</head>
+<body id="top">
+  <div class="preload" data-preaload>
+    <div class="circle"></div>
+    <p class="text">{{ site.site_name }}</p>
+  </div>
+
+  <div class="topbar">
+    <div class="container">
+      <address class="topbar-item"><div class="icon"><ion-icon name="location-outline" aria-hidden="true"></ion-icon></div><span class="span">{{ site.address }}</span></address>
+      <div class="separator"></div>
+      <div class="topbar-item item-2"><div class="icon"><ion-icon name="time-outline" aria-hidden="true"></ion-icon></div><span class="span">{{ site.open_hours }}</span></div>
+      <a href="tel:{{ site.phone_link }}" class="topbar-item link"><div class="icon"><ion-icon name="call-outline" aria-hidden="true"></ion-icon></div><span class="span">{{ site.phone }}</span></a>
+      <div class="separator"></div>
+      <a href="mailto:{{ site.email }}" class="topbar-item link"><div class="icon"><ion-icon name="mail-outline" aria-hidden="true"></ion-icon></div><span class="span">{{ site.email }}</span></a>
+    </div>
+  </div>
+
+  <header class="header" data-header>
+    <div class="container">
+      <a href="{% url 'index' %}" class="logo brand-lockup" aria-label="Torque Tales home">
+        {% if site.logo %}<img src="{{ site.logo.url }}" width="76" height="76" class="site-logo-img" alt="{{ site.site_name }} home">{% else %}<img src="{% static 'website/assets/images/torque-tales-logo.jpg' %}" width="76" height="76" class="site-logo-img" alt="{{ site.site_name }} home">{% endif %}
+        <span class="brand-name">Torque Tales</span>
+      </a>
+      <nav class="navbar" data-navbar>
+        <button class="close-btn" aria-label="close menu" data-nav-toggler><ion-icon name="close-outline" aria-hidden="true"></ion-icon></button>
+        <a href="{% url 'index' %}" class="logo brand-lockup" aria-label="Torque Tales home">
+          {% if site.logo %}<img src="{{ site.logo.url }}" width="96" height="96" class="site-logo-img" alt="{{ site.site_name }} home">{% else %}<img src="{% static 'website/assets/images/torque-tales-logo.jpg' %}" width="96" height="96" class="site-logo-img" alt="{{ site.site_name }} home">{% endif %}
+          <span class="brand-name">Torque Tales</span>
+        </a>
+        <ul class="navbar-list">
+          <li class="navbar-item"><a href="{% url 'index' %}#home" class="navbar-link hover-underline"><div class="separator"></div><span class="span">Home</span></a></li>
+          <li class="navbar-item"><a href="{% url 'index' %}#menu" class="navbar-link hover-underline"><div class="separator"></div><span class="span">Menus</span></a></li>
+          <li class="navbar-item"><a href="{% url 'index' %}#about" class="navbar-link hover-underline"><div class="separator"></div><span class="span">About Us</span></a></li>
+          <li class="navbar-item"><a href="{% url 'gallery' %}" class="navbar-link hover-underline active" aria-current="page"><div class="separator"></div><span class="span">Gallery</span></a></li>
+          <li class="navbar-item"><a href="{% url 'index' %}#reservation" class="navbar-link hover-underline"><div class="separator"></div><span class="span">Contact</span></a></li>
+        </ul>
+        <div class="text-center">
+          <p class="headline-1 navbar-title">Visit Us</p>
+          <address class="body-4">{{ site.address }}</address>
+          <p class="body-4 navbar-text">{{ site.navbar_open_hours }}</p>
+          <a href="mailto:{{ site.email }}" class="body-4 sidebar-link">{{ site.email }}</a>
+          <div class="separator"></div>
+          <p class="contact-label">Booking Request</p>
+          <a href="tel:{{ site.booking_phone_link }}" class="body-1 contact-number hover-underline">{{ site.booking_phone }}</a>
+        </div>
+      </nav>
+      <a href="{% url 'index' %}#reservation" class="btn btn-secondary"><span class="text text-1">Find A Table</span><span class="text text-2" aria-hidden="true">Find A Table</span></a>
+      <button class="nav-open-btn" aria-label="open menu" data-nav-toggler><span class="line line-1"></span><span class="line line-2"></span><span class="line line-3"></span></button>
+      <div class="overlay" data-nav-toggler data-overlay></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="gallery-hero text-center" aria-labelledby="gallery-title">
+      <div class="gallery-hero-bg"></div>
+      <div class="container">
+        <p class="section-subtitle label-2">A Glimpse Inside</p>
+        <h1 class="display-1" id="gallery-title">Our Gallery</h1>
+        <p class="body-2 gallery-intro">Discover handcrafted plates, warm café corners and the memorable moments that make every visit special.</p>
+      </div>
+    </section>
+
+    <section class="section gallery-section" aria-label="Café gallery">
+      <div class="container">
+        <div class="gallery-heading text-center">
+          <p class="section-subtitle label-2">Explore Our Story</p>
+          <h2 class="headline-1 section-title">View Gallery</h2>
+          <p class="body-2">Every section captures a different side of the Torque Tales experience.</p>
+        </div>
+
+        {% if gallery_sections %}
+        <div class="gallery-sections">
+          {% for section in gallery_sections %}
+          <section class="gallery-category" aria-labelledby="gallery-category-{{ forloop.counter }}">
+            <header class="gallery-category-header">
+              <span class="gallery-category-number label-2">0{{ forloop.counter }}</span>
+              <div>
+                <p class="section-subtitle label-2">Torque Tales Moments</p>
+                <h3 class="headline-1 gallery-category-title" id="gallery-category-{{ forloop.counter }}">{{ section.title }}</h3>
+              </div>
+              <span class="gallery-category-count label-2">{{ section.items|length }} {% if section.items|length == 1 %}Moment{% else %}Moments{% endif %}</span>
+            </header>
+
+            <ul class="gallery-grid">
+              {% for item in section.items %}
+              <li class="gallery-item{% if forloop.first and section.items|length > 2 %} gallery-item-featured{% endif %}">
+                <figure class="gallery-card">
+                  {% if item.media_type == "video" and item.video %}
+                  <video class="gallery-media" autoplay muted loop playsinline preload="metadata" aria-label="{{ item.title }}"><source src="{{ item.video.url }}"></video>
+                  {% elif item.image %}
+                  <img src="{{ item.image.url }}" alt="{{ item.title }}" class="gallery-media" loading="lazy">
+                  {% endif %}
+                  <figcaption class="gallery-caption">
+                    <span class="label-2">{{ section.title }}</span>
+                    <h4 class="title-2">{{ item.title }}</h4>
+                  </figcaption>
+                </figure>
+              </li>
+              {% endfor %}
+            </ul>
+          </section>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="gallery-empty text-center">
+          <ion-icon name="images-outline" aria-hidden="true"></ion-icon>
+          <h3 class="title-2">Beautiful moments are coming soon.</h3>
+          <p class="body-4">Add gallery images or videos from the admin panel.</p>
+        </div>
+        {% endif %}
+
+        <div class="gallery-cta text-center">
+          <p class="body-2">Ready to create your own memorable café moment?</p>
+          <a href="{% url 'index' %}#reservation" class="btn btn-primary"><span class="text text-1">Book A Table</span><span class="text text-2" aria-hidden="true">Book A Table</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="gallery-footer text-center">
+    <div class="container">
+      <a href="{% url 'index' %}" class="logo gallery-footer-logo">
+        {% if site.logo %}<img src="{{ site.logo.url }}" width="110" height="110" class="site-logo-img footer-logo-img" alt="{{ site.site_name }} home">{% else %}<img src="{% static 'website/assets/images/torque-tales-logo.jpg' %}" width="110" height="110" class="site-logo-img footer-logo-img" alt="{{ site.site_name }} home">{% endif %}
+      </a>
+      <address class="body-4">{{ site.address }}</address>
+      <a href="mailto:{{ site.email }}" class="body-4 contact-link">{{ site.email }}</a>
+      <a href="tel:{{ site.booking_phone_link }}" class="body-4 contact-link">Booking Request: {{ site.booking_phone }}</a>
+      <ul class="gallery-footer-links">
+        <li><a href="{% url 'index' %}" class="label-2 footer-link hover-underline">Home</a></li>
+        <li><a href="{% url 'index' %}#menu" class="label-2 footer-link hover-underline">Menus</a></li>
+        <li><a href="{% url 'gallery' %}" class="label-2 footer-link hover-underline">Gallery</a></li>
+        <li><a href="{% url 'index' %}#reservation" class="label-2 footer-link hover-underline">Contact</a></li>
+      </ul>
+      <div class="gallery-socials">
+        {% for social in social_links %}<a href="{{ social.url }}" target="_blank" rel="noopener" class="label-2 footer-link hover-underline">{{ social.name }}</a>{% endfor %}
+      </div>
+      <p class="copyright">{{ site.copyright_text }}</p>
+    </div>
+  </footer>
+
+  <a href="#top" class="back-top-btn active" aria-label="back to top" data-back-top-btn><ion-icon name="chevron-up" aria-hidden="true"></ion-icon></a>
+  <script src="{% static 'website/assets/js/script.js' %}"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

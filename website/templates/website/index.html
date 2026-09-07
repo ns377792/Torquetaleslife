@@ -24,7 +24,9 @@
   <link rel="stylesheet" href="{% static 'website/assets/css/style.css' %}">
 
   {% for slide in hero_slides %}
+  {% if slide.media_type == "image" and slide.image %}
   <link rel="preload" as="image" href="{{ slide.image.url }}">
+  {% endif %}
   {% endfor %}
 
 </head>
@@ -99,12 +101,13 @@
   <header class="header" data-header>
     <div class="container">
 
-      <a href="#" class="logo">
+      <a href="{% url 'index' %}" class="logo brand-lockup" aria-label="Torque Tales home">
         {% if site.logo %}
-        <img src="{{ site.logo.url }}" width="160" height="50" alt="{{ site.site_name }} - Home">
+        <img src="{{ site.logo.url }}" width="76" height="76" class="site-logo-img" alt="{{ site.site_name }} - Home">
         {% else %}
-        <img src="{% static 'website/assets/images/logo.svg' %}" width="160" height="50" alt="{{ site.site_name }} - Home">
+        <img src="{% static 'website/assets/images/torque-tales-logo.jpg' %}" width="76" height="76" class="site-logo-img" alt="{{ site.site_name }} - Home">
         {% endif %}
+        <span class="brand-name">Torque Tales</span>
       </a>
 
       <nav class="navbar" data-navbar>
@@ -113,12 +116,13 @@
           <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
         </button>
 
-        <a href="#" class="logo">
+        <a href="{% url 'index' %}" class="logo brand-lockup" aria-label="Torque Tales home">
           {% if site.logo %}
-          <img src="{{ site.logo.url }}" width="160" height="50" alt="{{ site.site_name }} - Home">
+          <img src="{{ site.logo.url }}" width="96" height="96" class="site-logo-img" alt="{{ site.site_name }} - Home">
           {% else %}
-          <img src="{% static 'website/assets/images/logo.svg' %}" width="160" height="50" alt="{{ site.site_name }} - Home">
+          <img src="{% static 'website/assets/images/torque-tales-logo.jpg' %}" width="96" height="96" class="site-logo-img" alt="{{ site.site_name }} - Home">
           {% endif %}
+          <span class="brand-name">Torque Tales</span>
         </a>
 
         <ul class="navbar-list">
@@ -145,9 +149,9 @@
           </li>
 
           <li class="navbar-item">
-            <a href="#" class="navbar-link hover-underline">
+            <a href="{% url 'gallery' %}" class="navbar-link hover-underline">
               <div class="separator"></div>
-              <span class="span">Our Chefs</span>
+              <span class="span">Gallery</span>
             </a>
           </li>
 
@@ -213,7 +217,14 @@
           <li class="slider-item{% if forloop.first %} active{% endif %}" data-hero-slider-item>
 
             <div class="slider-bg">
+              {% if slide.media_type == "video" and slide.video %}
+              <video class="img-cover media-video" autoplay muted loop playsinline preload="metadata"
+                aria-label="{{ slide.title_line_1 }} {{ slide.title_line_2 }}">
+                <source src="{{ slide.video.url }}">
+              </video>
+              {% elif slide.image %}
               <img src="{{ slide.image.url }}" width="1880" height="950" alt="" class="img-cover">
+              {% endif %}
             </div>
 
             <p class="label-2 section-subtitle slider-reveal">{{ slide.subtitle }}</p>
@@ -271,7 +282,14 @@
 
                 <a href="#menu" class="has-before hover:shine">
                   <figure class="card-banner img-holder" style="--width: 285; --height: 336;">
+                    {% if card.media_type == "video" and card.video %}
+                    <video class="img-cover media-video" autoplay muted loop playsinline preload="metadata"
+                      aria-label="{{ card.title }}">
+                      <source src="{{ card.video.url }}">
+                    </video>
+                    {% elif card.image %}
                     <img src="{{ card.image.url }}" width="285" height="336" loading="lazy" alt="{{ card.title }}" class="img-cover">
+                    {% endif %}
                   </figure>
                 </a>
 
@@ -279,7 +297,6 @@
                   <h3 class="title-4 card-title">
                     <a href="#menu">{{ card.title }}</a>
                   </h3>
-                  <a href="#menu" class="btn-text hover-underline label-2">{{ card.link_text }}</a>
                 </div>
 
               </div>
@@ -310,16 +327,16 @@
             <div class="contact-label">Book Through Call</div>
             <a href="tel:{{ about.call_phone_link }}" class="body-1 contact-number hover-underline">{{ about.call_phone }}</a>
 
-            <a href="#reservation" class="btn btn-primary">
-              <span class="text text-1">Read More</span>
-              <span class="text text-2" aria-hidden="true">Read More</span>
-            </a>
-
           </div>
 
           <figure class="about-banner">
 
-            {% if about.banner_image %}
+            {% if about.banner_media_type == "video" and about.banner_video %}
+            <video class="w-100 media-video about-media" autoplay muted loop playsinline preload="metadata"
+              aria-label="{{ about.title }}">
+              <source src="{{ about.banner_video.url }}">
+            </video>
+            {% elif about.banner_image %}
             <img src="{{ about.banner_image.url }}" width="570" height="570" loading="lazy" alt="about banner" class="w-100" data-parallax-item data-parallax-speed="1">
             {% endif %}
 
@@ -328,10 +345,6 @@
               <img src="{{ about.small_image.url }}" width="285" height="285" loading="lazy" alt="" class="w-100">
             </div>
             {% endif %}
-
-            <div class="abs-img abs-img-2 has-before">
-              <img src="{% static 'website/assets/images/badge-2.png' %}" width="133" height="134" loading="lazy" alt="">
-            </div>
 
           </figure>
 
@@ -347,7 +360,12 @@
       <section class="special-dish text-center" aria-labelledby="dish-label">
 
         <div class="special-dish-banner">
-          {% if special_dish.banner_image %}
+          {% if special_dish.media_type == "video" and special_dish.video %}
+          <video class="img-cover media-video" autoplay muted loop playsinline preload="metadata"
+            aria-label="{{ special_dish.title }}">
+            <source src="{{ special_dish.video.url }}">
+          </video>
+          {% elif special_dish.banner_image %}
           <img src="{{ special_dish.banner_image.url }}" width="940" height="900" loading="lazy" alt="special dish" class="img-cover">
           {% endif %}
         </div>
@@ -360,16 +378,6 @@
             <p class="section-subtitle label-2">{{ special_dish.subtitle }}</p>
             <h2 class="headline-1 section-title">{{ special_dish.title }}</h2>
             <p class="section-text">{{ special_dish.text }}</p>
-
-            <div class="wrapper">
-              <del class="del body-3">${{ special_dish.old_price }}</del>
-              <span class="span body-1">${{ special_dish.new_price }}</span>
-            </div>
-
-            <a href="#menu" class="btn btn-primary">
-              <span class="text text-1">View All Menu</span>
-              <span class="text text-2" aria-hidden="true">View All Menu</span>
-            </a>
 
           </div>
         </div>
@@ -410,7 +418,7 @@
                     <span class="badge label-1">{{ item.badge }}</span>
                     {% endif %}
 
-                    <span class="span title-2">${{ item.price }}</span>
+                    <span class="span title-2">₹{{ item.price }}</span>
                   </div>
 
                   <p class="card-text label-1">
@@ -424,10 +432,6 @@
             {% endfor %}
 
           </ul>
-
-          <p class="menu-text text-center">
-            During winter daily from <span class="span">7:00 pm</span> to <span class="span">9:00 pm</span>
-          </p>
 
           <a href="#" class="btn btn-primary">
             <span class="text text-1">View All Menu</span>
@@ -445,9 +449,15 @@
       -->
 
       {% if testimonial %}
-      <section class="section testi text-center has-bg-image"
-        {% if testimonial.background_image %}style="background-image: url('{{ testimonial.background_image.url }}')"{% endif %}
+      <section class="section testi text-center has-bg-image{% if testimonial.background_media_type == 'video' and testimonial.background_video %} has-media-video{% endif %}"
+        {% if testimonial.background_media_type == "image" and testimonial.background_image %}style="background-image: url('{{ testimonial.background_image.url }}')"{% endif %}
         aria-label="testimonials">
+        {% if testimonial.background_media_type == "video" and testimonial.background_video %}
+        <video class="img-cover media-video testi-bg-video" autoplay muted loop playsinline preload="metadata"
+          aria-label="Testimonial background">
+          <source src="{{ testimonial.background_video.url }}">
+        </video>
+        {% endif %}
         <div class="container">
 
           <div class="quote">"</div>
@@ -640,8 +650,14 @@
               <div class="event-card has-before hover:shine">
 
                 <div class="card-banner img-holder" style="--width: 350; --height: 450;">
+                  {% if event.media_type == "video" and event.video %}
+                  <video class="img-cover media-video" autoplay muted loop playsinline preload="metadata"
+                    aria-label="{{ event.title }}">
+                    <source src="{{ event.video.url }}">
+                  </video>
+                  {% elif event.image %}
                   <img src="{{ event.image.url }}" width="350" height="450" loading="lazy" alt="{{ event.title }}" class="img-cover">
-                  <time class="publish-date label-2" datetime="{{ event.date|date:'Y-m-d' }}">{{ event.date|date:'d/m/Y' }}</time>
+                  {% endif %}
                 </div>
 
                 <div class="card-content">
@@ -656,11 +672,6 @@
             {% endfor %}
 
           </ul>
-
-          <a href="#" class="btn btn-primary">
-            <span class="text text-1">View Our Blog</span>
-            <span class="text text-2" aria-hidden="true">View Our Blog</span>
-          </a>
 
         </div>
       </section>
@@ -682,9 +693,9 @@
 
           <a href="#" class="logo">
             {% if site.logo %}
-            <img src="{{ site.logo.url }}" width="160" height="50" loading="lazy" alt="{{ site.site_name }} home">
+            <img src="{{ site.logo.url }}" width="110" height="110" class="site-logo-img footer-logo-img" loading="lazy" alt="{{ site.site_name }} home">
             {% else %}
-            <img src="{% static 'website/assets/images/logo.svg' %}" width="160" height="50" loading="lazy" alt="{{ site.site_name }} home">
+            <img src="{% static 'website/assets/images/torque-tales-logo.jpg' %}" width="110" height="110" class="site-logo-img footer-logo-img" loading="lazy" alt="{{ site.site_name }} home">
             {% endif %}
           </a>
 
@@ -742,7 +753,7 @@
           </li>
 
           <li>
-            <a href="#" class="label-2 footer-link hover-underline">Our Chefs</a>
+            <a href="{% url 'gallery' %}" class="label-2 footer-link hover-underline">Gallery</a>
           </li>
 
           <li>

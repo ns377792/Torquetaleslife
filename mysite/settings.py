@@ -117,6 +117,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Match the primary-key type used by the existing initial migration.
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
