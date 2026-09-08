@@ -1,11 +1,15 @@
 {
   "version": 2,
   "builds": [
-    { "src": "mysite/wsgi.py", "use": "@vercel/python" },
-    { "src": "build_files.sh", "use": "@vercel/static-build", "config": { "distDir": "staticfiles" } }
+    {
+      "src": "mysite/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": ["staticfiles/**", "media/**", "website/templates/**"]
+      }
+    }
   ],
   "routes": [
-    { "src": "/static/(.*)", "dest": "/staticfiles/$1" },
     { "src": "/(.*)", "dest": "mysite/wsgi.py" }
   ]
 }

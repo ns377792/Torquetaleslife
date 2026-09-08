@@ -23,12 +23,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-lf56fn852=p2ge6vpn!!e20z$j-29kwjyugqw@twb2!p0@dx4k'
+# Set SECRET_KEY as an environment variable on Vercel. The hardcoded value
+# below is only a fallback for local development.
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-lf56fn852=p2ge6vpn!!e20z$j-29kwjyugqw@twb2!p0@dx4k',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Set DEBUG=True as an env var only for local troubleshooting; leave it
+# unset (or False) on Vercel.
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']
+extra_hosts = os.environ.get('ALLOWED_HOSTS', '')
+if extra_hosts:
+    ALLOWED_HOSTS += [h.strip() for h in extra_hosts.split(',') if h.strip()]
+
+# Needed so Django accepts POST requests (forms, admin login) coming through
+# your *.vercel.app domain and any custom domain you add.
+CSRF_TRUSTED_ORIGINS = ['https://*.vercel.app']
+extra_origins = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+if extra_origins:
+    CSRF_TRUSTED_ORIGINS += [o.strip() for o in extra_origins.split(',') if o.strip()]
 
 
 # Application definition
@@ -77,13 +94,30 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+# IMPORTANT (Vercel): serverless functions have a read-only, ephemeral
+# filesystem, so SQLite CANNOT be used as your real production database
+# there — every deploy/cold-start resets it and writes silently fail.
+# Set a DATABASE_URL env var in the Vercel project settings pointing to a
+# hosted Postgres DB (Neon, Supabase, Vercel Postgres all have free tiers).
+# Locally (no DATABASE_URL set) it falls back to sqlite3 so `runserver`
+# still works out of the box.
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True,
+        )
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -122,7 +156,19 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# NOTE: Django 5.1 removed the old STATICFILES_STORAGE setting in favor of
+# STORAGES. Setting STATICFILES_STORAGE alone (as before) was silently
+# ignored, which meant WhiteNoise's manifest/compressed storage was never
+# actually used and static files could fail to resolve correctly.
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Match the primary-key type used by the existing initial migration.
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

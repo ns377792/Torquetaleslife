@@ -1,0 +1,13 @@
+# Secrets - never commit this
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Local SQLite (production uses Postgres via DATABASE_URL)
+db.sqlite3
+
+# Vercel
+.vercel

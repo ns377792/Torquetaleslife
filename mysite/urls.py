@@ -15,9 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve as static_serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,3 +27,14 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    # Vercel is serverless (no separate nginx/Apache in front of Django), so
+    # unlike a traditional server setup we still need Django to serve
+    # /media/ uploads (menu photos, gallery images, etc.) even with
+    # DEBUG=False. Fine for a small site like this; for heavy traffic move
+    # media to S3/Cloudinary instead.
+    urlpatterns += [
+        re_path(r'^media/(?P<path>.*)$', static_serve, {
+            'document_root': settings.MEDIA_ROOT,
+        }),
+    ]
